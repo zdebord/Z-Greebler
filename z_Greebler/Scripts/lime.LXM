@@ -1,0 +1,2 @@
+#LXMacro#
+poly.setMaterial Lime {0.86 1.0 0.45} 0.8 0.2 true false
