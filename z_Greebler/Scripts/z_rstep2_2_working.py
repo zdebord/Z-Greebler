@@ -94,11 +94,9 @@ def createSqure(vid1,vid2,vid3,vid4,lid):
 	
 	AddRandomColor()
 
-	
 	return lx.eval("query layerservice poly.index ? last")
 	
 	
-
 
 # ADDING COLOR	
 def AddRandomColor():
@@ -150,7 +148,6 @@ def AddRandomColor():
 		
 
 
-
 # ADDING Random select Polygons
 
 def RandomSelectPolygons():
@@ -173,8 +170,6 @@ def RandomSelectPolygons():
 	for p in Rand_Polys:
 		lx.eval('select.typeFrom polygon')
 		lx.eval('select.element %s polygon add %s' % (layer,p))
-	
-
 	
 	
 
@@ -296,13 +291,6 @@ def process(vid,lid,normal,limit,rh,limitw):
                 	vid = shift(mesh[i][j],mesh[i+1][j],mesh[i+1][j+1],mesh[i][j+1],lid,normal,height,True,True)
 	lx.eval("select.drop polygon")
 
-# Z code
-#lx.command("user.defNew", name = "myZReStep_density"  , type = "float" , life = "Transient")
-#if lx.eval("query zReStep_density userValue.isDefined ?") :
-#	myZReStep_density = lx.eval("user.value zReStep_density ?")
-#else :
-#	myZReStep_density = 0.85
-
 
 r1 = lx.eval("user.value zReStep_density ?") #percent from center diagonal to start of next polygon
 dw = lx.eval("user.value zReStep_minAmplitude ?") #Minimum amplitude - Ratio of minimum width of generated polygon to the initially selected polygon (%) (given as interger)
@@ -313,8 +301,6 @@ r = Random()
 main = lx.eval("query layerservice layers ? main")
 poly=lx.eval("query layerservice polys ? selected")
 
-
-#chunksize = 25
 
 def doMainProcess() :
 	main = lx.eval("query layerservice layers ? main")
@@ -342,7 +328,6 @@ def doMainProcess() :
 	if poly != None :
 		limit = lx.eval("user.value zReStep_fractalCount ?")
 		if type(poly) == tuple :
-			lx.out("asdfasfasdfasf")
 			for pol in poly:
 				t.step(1)
 				vid = getPVList(pol)
@@ -357,7 +342,6 @@ def doMainProcess() :
 			poly.sort()
 			poly.reverse()
 		else :
-			lx.out("hiyayayayayayaya")
 			vid = getPVList(poly)
 			if len(vid) == 4 :
 				long = idistance(vid[0],vid[2])
@@ -370,76 +354,7 @@ def doMainProcess() :
 	
 	
 	
-	
-	'''
-	if poly != None :
-		lx.out("sdfsdfsfsdfsdfsdfsd")
-	# loop for how many times to fracaltize, higher takes longer to calculate
-		limit = lx.eval("user.value zReStep_fractalCount ?")
-		if type(poly) == tuple :
-			for pol in poly:
-				vid = getPVList(pol)
-				if len(vid) != 4 : continue
-				t.step(1)
-				for i in range (1, ((lx.eval("user.value zReStep_fractalStackNum ?")*1)+1)) :
-					mylong = idistance(vid[0],vid[2])
-					limitw = mylong / dw
-					rh = mylong * dh / 100.0
-					normal = getPNormal(pol)
-					if (limitw > minSize):
-						process(vid,main,normal,limit,rh,limitw)
-				poly = list(poly)
-				poly.sort()
-				poly.reverse()
-		else :
-			lx.out("hiyayayayayayaya")
-			vid = getPVList(poly)
-        	if len(vid) == 4 :
-		#	m.step(chunkSize)
-				for i in range (1, (lx.eval("user.value zReStep_fractalStackNum ?")+1)) :
-					mylong = idistance(vid[0],vid[2])
-					limitw = mylong / dw 
-					rh = mylong * dh / 100.0
-					poly=lx.eval("query layerservice polys ? selected")
-					normal = getPNormal(poly)
-					if limitw > minSize :
-						process(vid,main,normal,limit,rh,limitw)
-						lx.eval("select.drop polygon")
-			
-
-'''
 doMainProcess()
 lx.eval("select.drop polygon")
 
-'''
-if poly != None :
-	limit = lx.eval("user.value zReStep_fractalCount ?")
-	if type(poly) == tuple :
-		for pol in poly:
-			vid = getPVList(pol)
-			if len(vid) != limit+1 : continue 
-			long = idistance(vid[0],vid[2])
-			limitw = long / dw 
-			rh = long * dh / 100.0
-			normal = getPNormal(pol)
-			process(vid,main,normal,limit)
-		poly = list(poly)
-		poly.sort()
-		poly.reverse()
-	#	for pol in poly:
-	#		lx.eval("select.type polygon")
-	#		lx.command("select.element",layer=main,type="polygon",mode="set",index=pol)
-	#		lx.eval("poly.remove")
-	else :
-		vid = getPVList(poly)
-		if len(vid) == (limit-1) or limit :
-			long = idistance(vid[0],vid[2])
-			limitw = long / dw 
-			rh = long * dh / 100.0
-			normal = getPNormal(poly)
-			process(vid,main,normal,limit)
-	#		lx.eval("select.type polygon")
-	#		lx.command("select.element",layer=main,type="polygon",mode="set",index=poly)
-	#		lx.eval("poly.remove")	
-'''
 
